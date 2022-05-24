@@ -1,4 +1,4 @@
-package helloworld
+package util
 
 import (
 	"encoding/json"
