@@ -1,4 +1,4 @@
-package util
+package spotigo
 
 // Scopes let you specify exactly which types of data your application wants to access.
 // The set of scopes you pass in your authentication request determines what access the
