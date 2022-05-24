@@ -1,4 +1,4 @@
-package spotigo
+package helloworld
 
 import (
 	"bytes"

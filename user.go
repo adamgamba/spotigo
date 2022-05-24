@@ -1,6 +1,6 @@
 // Package spotify provides utilties for interfacing
 // with Spotify's Web API.
-package spotigo
+package helloworld
 
 import (
 	"bytes"
