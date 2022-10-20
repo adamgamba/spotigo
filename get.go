@@ -175,6 +175,7 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 		numPlaylists, ok2 := u.GetNumSavedPlaylists()
 		ok = ok && ok2
 		limit = numPlaylists
+		fmt.Println("new limit:", limit)
 	}
 
 	// Spotify will only return 50 playlists at a time
@@ -201,6 +202,7 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 
 	reqURL := u.baseURL + "me/playlists?limit=" + fmt.Sprint(limit) + "&offset=" + fmt.Sprint(offset)
 	savedPlaylists := savedPlaylists{}
+	fmt.Println("requrl:", reqURL)
 
 	ok = u.sendGetRequest(reqURL, &savedPlaylists) && ok
 
