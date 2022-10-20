@@ -184,6 +184,7 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 
 		reqURL := u.baseURL + "me/playlists?limit=" + fmt.Sprint(MAX_LIMIT) + "&offset=" + fmt.Sprint(offset)
 		savedPlaylists := savedPlaylists{}
+		fmt.Println("in loop requrl:", reqURL)
 
 		ok = u.sendGetRequest(reqURL, &savedPlaylists) && ok
 
@@ -213,7 +214,7 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 	// limit -= MAX_LIMIT
 
 	fmt.Println("test")
-	return playlists, true
+	return playlists, ok
 }
 func (u *User) GetNumSavedPlaylists() (int, bool) {
 	reqURL := u.baseURL + "me/playlists?limit=1"
