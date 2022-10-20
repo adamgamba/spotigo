@@ -167,6 +167,7 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 	playlists := make([]Playlist, 0)
 	ok := true
 	offset := 0
+	fmt.Println("calling getsavedplaylists with limit %d...", limit)
 
 	if limit < 0 {
 		return nil, false
