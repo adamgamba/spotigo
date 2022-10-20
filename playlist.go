@@ -1,7 +1,6 @@
 package spotigo
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -120,14 +119,17 @@ func (p *Playlist) GetTrackURIs(u User) []string {
 
 	// * added
 	next := p.Tracks.Next
-	fmt.Println("next val:", next)
+	// fmt.Println("next val:", next)
 	for next != "" {
 		tracks := tracksOfPlaylist{}
-		ok := u.sendGetRequest(next, &tracks)
-		fmt.Println("gettrackURIs ok?", ok)
+		u.sendGetRequest(next, &tracks)
+
+		for _, track := range tracks.Items {
+			uris = append(uris, track.Track.ID)
+		}
 
 		next = tracks.Next
-		fmt.Println("next val:", next)
+		// fmt.Println("next val:", next)
 
 	}
 
