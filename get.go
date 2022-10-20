@@ -169,10 +169,12 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 	offset := 0
 
 	if limit < 0 {
-		limit = 0
+		return nil, false
 	}
 	if getAll {
-		limit = MAX_LIMIT + 1
+		numPlaylists, ok2 := u.GetNumSavedPlaylists()
+		ok = ok && ok2
+		limit = numPlaylists
 	}
 
 	// Spotify will only return 50 playlists at a time
@@ -188,9 +190,9 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 			playlists = append(playlists, x)
 		}
 
-		if i == 0 && getAll {
-			limit = savedPlaylists.Total
-		}
+		// if i == 0 && getAll {
+		// 	limit = savedPlaylists.Total
+		// }
 
 		offset += MAX_LIMIT
 		limit -= MAX_LIMIT
@@ -205,8 +207,8 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 	for _, x := range savedPlaylists.Items {
 		playlists = append(playlists, x)
 	}
-	offset += MAX_LIMIT
-	limit -= MAX_LIMIT
+	// offset += MAX_LIMIT
+	// limit -= MAX_LIMIT
 
 	fmt.Println("test")
 	return playlists, true
