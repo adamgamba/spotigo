@@ -208,7 +208,8 @@ func (u *User) GetSavedPlaylists(getAll bool, limit int) ([]Playlist, bool) {
 	offset += MAX_LIMIT
 	limit -= MAX_LIMIT
 
-	return playlists, ok
+	fmt.Println("test")
+	return playlists, true
 }
 func (u *User) GetNumSavedPlaylists() (int, bool) {
 	reqURL := u.baseURL + "me/playlists?limit=1"
