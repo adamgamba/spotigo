@@ -117,9 +117,8 @@ func (p *Playlist) GetTrackURIs(u User) []string {
 		uris = append(uris, track.Track.ID)
 	}
 
-	// * added
+	// * Allows call to get tracks of playlist when there are > 100 songs
 	next := p.Tracks.Next
-	// fmt.Println("next val:", next)
 	for next != "" {
 		tracks := tracksOfPlaylist{}
 		u.sendGetRequest(next, &tracks)
@@ -129,7 +128,6 @@ func (p *Playlist) GetTrackURIs(u User) []string {
 		}
 
 		next = tracks.Next
-		// fmt.Println("next val:", next)
 
 	}
 
@@ -148,10 +146,25 @@ func (p *Playlist) GetArtistURIs() []string {
 }
 
 // Get all Tracks on a Playlist
-func (p *Playlist) GetTracks() []Track {
+func (p *Playlist) GetTracks(u User) []Track {
 	uris := make([]Track, 0)
 	for _, x := range p.Tracks.Items {
 		uris = append(uris, x.Track)
 	}
+
+	// * Allows call to get tracks of playlist when there are > 100 songs
+	next := p.Tracks.Next
+	for next != "" {
+		tracks := tracksOfPlaylist{}
+		u.sendGetRequest(next, &tracks)
+
+		for _, track := range tracks.Items {
+			uris = append(uris, track.Track)
+		}
+
+		next = tracks.Next
+
+	}
+
 	return uris
 }
