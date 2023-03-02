@@ -1,6 +1,7 @@
 package spotigo
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -57,6 +58,64 @@ func (u *User) Play() bool {
 
 	reqURL := u.baseURL + "me/player/play"
 	ok = u.sendRequest(http.MethodPut, reqURL) && ok
+
+	return ok
+}
+
+// Start playing a specific Track
+func (u *User) PlayTrack(q Query, i interface{}) bool {
+	uri := ""
+	ok := true
+
+	switch v := i.(type) {
+	case string:
+		bytes, searchErr := q.search(v, "track")
+		if searchErr != nil {
+			ok = false
+		}
+
+		searchResult := searchResult{}
+		jsonErr := json.Unmarshal(bytes, &searchResult)
+
+		if jsonErr != nil {
+			log.Fatal("JSON Error:", jsonErr)
+		}
+
+		if searchResult.Tracks.Total > 0 {
+			track := searchResult.Tracks.Items[0]
+			uri = track.ID
+		}
+	case Track:
+		uri = v.ID
+	// Invalid Type
+	default:
+		return false
+	}
+
+	// Source: https://github.com/zmb3/spotify/
+	reqData := struct {
+		Uris []string `json:"uris"`
+		// Play     bool     `json:"play"`
+	}{
+		Uris: []string{"spotify:track:" + uri},
+	}
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(reqData)
+	/// End Source
+
+	if err != nil {
+		return false
+	}
+
+	req, err := http.NewRequest(http.MethodPut, u.baseURL+"me/player/play", buf)
+
+	if err != nil {
+		return false
+	}
+	err = u.execute(req, nil, http.StatusNoContent)
+	if err != nil {
+		return false
+	}
 
 	return ok
 }
